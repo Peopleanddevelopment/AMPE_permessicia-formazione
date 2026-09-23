@@ -1,0 +1,2498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6ef63" />
+  <meta name="description" content="Questionario in due parti: feedback sulla formazione e verifica formativa sui Permessi CIA." />
+  <title>Permessi CIA – Feedback e verifica finale</title>
+
+  <style>
+    :root {
+      --ink: #111111;
+      --muted: #5e5e59;
+      --line: #d9d9d2;
+      --paper: #ffffff;
+      --canvas: #f4f4ef;
+      --yellow: #f6ef63;
+      --yellow-soft: #fffbd4;
+      --green: #cdeccf;
+      --green-strong: #1f6b36;
+      --pink: #f1d6df;
+      --blue: #d8e9f4;
+      --red: #b3261e;
+      --red-soft: #fff0ee;
+      --shadow: 0 18px 45px rgba(17, 17, 17, 0.10);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --font: "ABC Monument Grotesk", "ABC Grotesk", Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--canvas);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(246, 239, 99, 0.42), transparent 28rem),
+        radial-gradient(circle at 94% 20%, rgba(216, 233, 244, 0.56), transparent 27rem),
+        var(--canvas);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(100%, 980px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 28px 22px 44px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 44px;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 0.83rem;
+      font-weight: 800;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 16px;
+      height: 16px;
+      border: 4px solid var(--ink);
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+
+    .mode-badge {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: var(--paper);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .mode-badge.is-visible {
+      display: inline-flex;
+    }
+
+    .mode-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--yellow);
+      box-shadow: 0 0 0 3px rgba(246, 239, 99, 0.35);
+    }
+
+    .progress-wrap {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 18px;
+    }
+
+    .progress-wrap.is-visible {
+      display: flex;
+    }
+
+    .progress-track {
+      position: relative;
+      flex: 1;
+      height: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--ink);
+      transition: width 260ms ease;
+    }
+
+    .progress-label {
+      min-width: 72px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .panel {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 650px;
+      border: 1px solid rgba(17, 17, 17, 0.14);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow);
+    }
+
+    .panel::after {
+      position: absolute;
+      z-index: 0;
+      top: -90px;
+      right: -80px;
+      width: 210px;
+      height: 210px;
+      border: 42px solid rgba(246, 239, 99, 0.23);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      display: none;
+      min-height: 650px;
+      padding: clamp(28px, 5vw, 58px);
+      animation: enter 260ms ease both;
+    }
+
+    .screen.is-active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 8px;
+      margin: 0 0 22px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-size: 0.74rem;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow.quiz {
+      background: var(--blue);
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    .screen h1:focus,
+    .screen h2:focus,
+    .screen legend:focus {
+      outline: none;
+    }
+
+    h1 {
+      max-width: 740px;
+      margin-bottom: 24px;
+      font-size: clamp(2.55rem, 7vw, 5.75rem);
+      font-weight: 900;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    h2 {
+      max-width: 750px;
+      margin-bottom: 20px;
+      font-size: clamp(1.8rem, 4.2vw, 3.25rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+    }
+
+    .welcome-title {
+      max-width: 760px;
+      margin-bottom: 8px;
+      font-size: clamp(2.7rem, 6.5vw, 5rem);
+      font-weight: 750;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .welcome-subtitle {
+      max-width: 710px;
+      margin: 0 0 25px;
+      color: #2e2e2a;
+      font-size: clamp(1.2rem, 2.4vw, 1.55rem);
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+    }
+
+    legend h2 {
+      max-width: 790px;
+      margin-bottom: 22px;
+      font-size: clamp(1.55rem, 3.5vw, 2.55rem);
+      font-weight: 500;
+      letter-spacing: -0.022em;
+      line-height: 1.2;
+    }
+
+    .lead {
+      max-width: 710px;
+      margin-bottom: 30px;
+      color: #2e2e2a;
+      font-size: clamp(1.04rem, 2.2vw, 1.28rem);
+      line-height: 1.55;
+    }
+
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 2px 0 28px;
+    }
+
+    .part-card {
+      padding: 21px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--yellow-soft);
+    }
+
+    .part-card:nth-child(2) {
+      background: var(--blue);
+    }
+
+    .part-label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 0.73rem;
+      font-weight: 900;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .part-card h3 {
+      margin: 0 0 9px;
+      font-size: 1.14rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .part-card p {
+      margin: 0;
+      color: #2e2e2a;
+      font-size: 0.96rem;
+      line-height: 1.48;
+    }
+
+    .objective-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+      margin: 6px 0 30px;
+    }
+
+    .objective-card {
+      min-height: 128px;
+      padding: 18px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+    }
+
+    .objective-card:nth-child(1) {
+      background: var(--yellow-soft);
+    }
+
+    .objective-card:nth-child(2) {
+      background: var(--pink);
+    }
+
+    .objective-card:nth-child(3) {
+      background: var(--blue);
+    }
+
+    .objective-number {
+      display: block;
+      margin-bottom: 20px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .objective-card strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1.22;
+    }
+
+    .meta-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.87rem;
+      line-height: 1.45;
+    }
+
+    .meta-note span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .meta-note span::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink);
+      content: "";
+    }
+
+    .question-number {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.83rem;
+      font-weight: 800;
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
+    }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    legend {
+      width: 100%;
+      padding: 0;
+    }
+
+    .helper {
+      max-width: 690px;
+      margin: -4px 0 22px;
+      color: var(--muted);
+      font-size: 0.91rem;
+      line-height: 1.5;
+    }
+
+    .scale-anchors {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 2px 10px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .option-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+
+    .scale-option,
+    .choice-option {
+      position: relative;
+      display: flex;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .scale-option {
+      min-height: 108px;
+    }
+
+    .scale-card {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 15px 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .scale-value {
+      font-size: 1.65rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .scale-text {
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1.18;
+      text-align: center;
+    }
+
+    .option-input:focus-visible + .scale-card,
+    .option-input:focus-visible + .choice-card,
+    textarea:focus-visible,
+    .field-input:focus-visible,
+    .btn:focus-visible {
+      outline: 3px solid rgba(17, 17, 17, 0.28);
+      outline-offset: 3px;
+    }
+
+    .scale-option:hover .scale-card,
+    .choice-option:hover .choice-card {
+      border-color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    .option-input:checked + .scale-card {
+      border-color: var(--ink);
+      background: var(--yellow);
+      box-shadow: 4px 4px 0 var(--ink);
+      transform: translate(-2px, -2px);
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .choice-card {
+      display: grid;
+      flex: 1;
+      grid-template-columns: 38px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+      min-height: 66px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+    }
+
+    .choice-marker {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      background: var(--paper);
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .choice-text {
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .option-input:checked + .choice-card {
+      border-color: var(--ink);
+      background: var(--yellow-soft);
+      box-shadow: 4px 4px 0 var(--ink);
+      transform: translate(-2px, -2px);
+    }
+
+    .option-input:checked + .choice-card .choice-marker {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .choice-option.is-disabled {
+      cursor: not-allowed;
+    }
+
+    .choice-option.is-disabled .choice-card {
+      opacity: 0.42;
+      transform: none;
+    }
+
+    .selection-counter {
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--canvas);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 190px;
+      resize: vertical;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.5;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    textarea::placeholder {
+      color: #92928b;
+    }
+
+    textarea:focus {
+      border-color: var(--ink);
+      box-shadow: 4px 4px 0 var(--yellow);
+      outline: none;
+    }
+
+
+
+    .identity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      max-width: 760px;
+      margin-top: 4px;
+    }
+
+    .field-group {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      color: var(--ink);
+      font-size: 0.94rem;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .field-label span {
+      color: var(--red);
+    }
+
+    .field-input {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 550;
+      letter-spacing: 0.025em;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .field-input:focus {
+      border-color: var(--ink);
+      box-shadow: 4px 4px 0 var(--yellow);
+      outline: none;
+    }
+
+    .field-input[aria-invalid="true"] {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .field-hint {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .field-error {
+      min-height: 1.2em;
+      color: var(--red);
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .data-note {
+      max-width: 760px;
+      margin-top: 22px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--ink);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      background: var(--yellow-soft);
+      color: #363631;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .char-count {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .error-message {
+      display: none;
+      align-items: flex-start;
+      gap: 9px;
+      margin-top: 16px;
+      padding: 11px 13px;
+      border: 1px solid var(--red);
+      border-radius: var(--radius-sm);
+      background: var(--red-soft);
+      color: var(--red);
+      font-size: 0.88rem;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+
+    .error-message.is-visible {
+      display: flex;
+    }
+
+    .error-icon {
+      flex: 0 0 auto;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: auto;
+      padding-top: 32px;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 10px;
+      margin-left: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 19px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 850;
+      line-height: 1;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, opacity 160ms ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: 0 0 0 var(--ink);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      box-shadow: 4px 4px 0 var(--yellow);
+    }
+
+    .btn-secondary {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--yellow-soft);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.52;
+    }
+
+    .btn-arrow {
+      font-size: 1.15rem;
+      line-height: 0;
+    }
+
+    .submitting {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .submitting::after {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.42);
+      border-top-color: var(--paper);
+      border-radius: 50%;
+      content: "";
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .section-intro {
+      justify-content: center;
+    }
+
+    .section-intro-card {
+      max-width: 710px;
+      padding: 26px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--blue);
+    }
+
+    .section-intro-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .finish-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .success-mark {
+      display: grid;
+      width: 76px;
+      height: 76px;
+      margin-bottom: 24px;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--green);
+      font-size: 2rem;
+      font-weight: 900;
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .score-card {
+      padding: 23px;
+      border: 1px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--yellow-soft);
+    }
+
+    .score-value {
+      display: block;
+      margin-bottom: 8px;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      line-height: 0.9;
+    }
+
+    .score-label {
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .results-review {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    details.result-item {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--paper);
+    }
+
+    details.result-item[open] {
+      border-color: var(--ink);
+    }
+
+    .result-item summary {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 14px 15px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .result-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .result-status {
+      display: grid;
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 0.76rem;
+      font-weight: 900;
+    }
+
+    .result-status.correct {
+      background: var(--green);
+      color: var(--green-strong);
+    }
+
+    .result-status.wrong {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .result-body {
+      padding: 0 15px 16px 52px;
+      color: #373732;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .result-body p {
+      margin-bottom: 8px;
+    }
+
+    .result-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .technical-note {
+      display: none;
+      margin-top: 24px;
+      padding: 15px;
+      border: 1px dashed var(--ink);
+      border-radius: var(--radius-sm);
+      background: var(--canvas);
+      color: #3f3f3b;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .technical-note.is-visible {
+      display: block;
+    }
+
+    .technical-note strong {
+      color: var(--ink);
+    }
+
+    .download-link {
+      display: inline-flex;
+      margin-top: 11px;
+      color: var(--ink);
+      font-weight: 850;
+      text-underline-offset: 3px;
+    }
+
+    .fatal-error {
+      display: none;
+      min-height: 650px;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .fatal-error.is-visible {
+      display: flex;
+    }
+
+    .fatal-error-box {
+      max-width: 540px;
+      padding: 26px;
+      border: 1px solid var(--red);
+      border-radius: var(--radius-md);
+      background: var(--red-soft);
+    }
+
+    .fatal-error-box h2 {
+      font-size: 2rem;
+    }
+
+    .noscript {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 24px;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: var(--yellow-soft);
+      font-family: Arial, sans-serif;
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        padding: 18px 12px 28px;
+      }
+
+      .topbar {
+        margin-bottom: 14px;
+        padding: 0 4px;
+      }
+
+      .brand {
+        font-size: 0.74rem;
+      }
+
+      .panel,
+      .screen,
+      .fatal-error {
+        min-height: calc(100vh - 118px);
+      }
+
+      .screen {
+        padding: 28px 20px 24px;
+      }
+
+      .panel {
+        border-radius: 22px;
+      }
+
+      .panel::after {
+        top: -122px;
+        right: -130px;
+      }
+
+      h1 {
+        font-size: clamp(2.8rem, 14vw, 4.65rem);
+      }
+
+      h2 {
+        font-size: clamp(1.75rem, 8.3vw, 2.55rem);
+      }
+
+      .welcome-title {
+        font-size: clamp(2.65rem, 13vw, 4.2rem);
+      }
+
+      legend h2 {
+        font-size: clamp(1.45rem, 6.8vw, 2rem);
+        line-height: 1.23;
+      }
+
+      .parts-grid,
+      .objective-grid,
+      .identity-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .objective-card {
+        min-height: auto;
+      }
+
+      .objective-number {
+        margin-bottom: 10px;
+      }
+
+      .scale-grid {
+        grid-template-columns: repeat(5, minmax(54px, 1fr));
+        gap: 6px;
+        overflow-x: auto;
+        padding: 2px 2px 8px;
+        scrollbar-width: thin;
+      }
+
+      .scale-option {
+        min-height: 94px;
+      }
+
+      .scale-card {
+        min-width: 56px;
+        padding: 12px 5px;
+        border-radius: 15px;
+      }
+
+      .scale-text {
+        display: none;
+      }
+
+      .scale-anchors {
+        font-size: 0.7rem;
+      }
+
+      .choice-card {
+        grid-template-columns: 34px minmax(0, 1fr);
+        padding: 12px 13px;
+      }
+
+      .choice-marker {
+        width: 29px;
+        height: 29px;
+      }
+
+      .nav {
+        align-items: stretch;
+      }
+
+      .nav .btn {
+        min-width: 50px;
+      }
+
+      .btn-label-optional {
+        display: none;
+      }
+
+      .finish-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .score-card {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .mode-badge {
+        padding: 7px 9px;
+        font-size: 0.66rem;
+      }
+
+      .screen {
+        padding-inline: 17px;
+      }
+
+      .choice-text {
+        font-size: 0.92rem;
+      }
+
+      .btn {
+        padding-inline: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <div class="noscript">
+      Per compilare il questionario è necessario attivare JavaScript nel browser.
+    </div>
+  </noscript>
+
+  <main class="app" id="app" hidden>
+    <header class="topbar">
+      <div class="brand" aria-label="Permessi CIA">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Permessi CIA</span>
+      </div>
+      <div class="mode-badge" id="modeBadge" aria-live="polite">
+        <span class="mode-dot" aria-hidden="true"></span>
+        <span id="modeBadgeText">2 parti · quiz incluso</span>
+      </div>
+    </header>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div
+        class="progress-track"
+        id="progressTrack"
+        role="progressbar"
+        aria-label="Avanzamento del questionario"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+      >
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">0 di 0</div>
+    </div>
+
+    <section class="panel" id="panel" aria-live="polite"></section>
+
+    <section class="fatal-error" id="fatalError" role="alert">
+      <div class="fatal-error-box">
+        <h2>Non è stato possibile aprire il questionario.</h2>
+        <p>Ricarica la pagina. Se il problema continua, segnala l’errore alla persona che ti ha inviato il link.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    /* ==============================================================
+       CONFIGURAZIONE RAPIDA
+       --------------------------------------------------------------
+       1) URL del trigger HTTP già configurato.
+       2) Il questionario include sempre entrambe le parti:
+          feedback informativo + verifica formativa finale.
+       3) sessionLabel può essere compilata qui oppure passata nell'URL:
+          ?sessione=Incontro%201
+       ============================================================== */
+    const CONFIG = Object.freeze({
+      powerAutomateUrl: "https://f64e537a8be94b0ab6d276748c9434.85.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/2581a87f31814d93b911cc0973edb0c5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=xgnjkLE9eCJdaVno2TfITdBsiW1eA0sBOhGdXrEg3f8",
+      sessionLabel: "",
+      requestMode: "no-cors-text", // compatibile con GitHub Pages e flusso manual → Create item
+      maxOpenTextLength: 1500,
+      saveDraft: true,
+      showTechnicalNoticeWhenDisconnected: false
+    });
+
+    const QUESTIONNAIRE_VERSION = "5.1.0";
+    const STORAGE_KEY = "permessi-cia-questionario-draft-con-esercizi-live";
+    const FALLBACK_KEY = "permessi-cia-questionario-unsent-con-esercizi-live";
+
+    const params = new URLSearchParams(window.location.search);
+    const quizEnabled = true;
+
+    const sessionLabel = cleanText(
+      params.get("sessione") ||
+      params.get("session") ||
+      CONFIG.sessionLabel ||
+      "Non specificata",
+      140
+    );
+
+    const debugMode = ["1", "true"].includes((params.get("debug") || "").toLowerCase());
+
+    const prefilledEmployeeCode = cleanCode(
+      params.get("codiceDipendente") ||
+      params.get("employeeCode") ||
+      "",
+      40
+    );
+
+    const prefilledStoreCode = cleanCode(
+      params.get("codiceNegozio") ||
+      params.get("storeCode") ||
+      "",
+      24
+    );
+
+    const scaleLabels = [
+      { value: "1", label: "Per niente" },
+      { value: "2", label: "Poco" },
+      { value: "3", label: "Abbastanza" },
+      { value: "4", label: "Molto" },
+      { value: "5", label: "Moltissimo" }
+    ];
+
+    const questions = [
+      {
+        id: "q1_preparedness",
+        number: 1,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Dopo questa formazione, quanto ti senti più preparato/a a riconoscere le situazioni in cui può essere applicabile una misura prevista dal CIA?"
+      },
+      {
+        id: "q2_role_clarity",
+        number: 2,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Quanto ti è chiaro quale deve essere il tuo ruolo quando un collaboratore ti presenta una richiesta relativa a permessi o congedi CIA?"
+      },
+      {
+        id: "q3_information_clarity",
+        number: 3,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Quanto ti è chiaro quali sono le informazioni essenziali da raccogliere prima di coinvolgere Amministrazione del personale (AMPE)?"
+      },
+      {
+        id: "q4_escalation_clarity",
+        number: 4,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Dopo la formazione, quanto ti è chiaro quando puoi dare una prima indicazione e quando è necessario coinvolgere Amministrazione del personale (AMPE) o HR?"
+      },
+      {
+        id: "q5_examples_helpful",
+        number: 5,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Quanto il modo in cui sono stati presentati i contenuti ti ha aiutato a capire come comportarti quando ricevi una richiesta?"
+      },
+      {
+        id: "q6_content_relevance",
+        number: 6,
+        section: "1. Feedback sulla formazione",
+        type: "scale",
+        required: true,
+        prompt: "Quanto ritieni che gli argomenti affrontati siano pertinenti rispetto alle situazioni che puoi incontrare nella gestione del negozio?"
+      },
+      {
+        id: "q7_detail_level",
+        number: 7,
+        section: "1. Feedback sulla formazione",
+        type: "single",
+        required: true,
+        prompt: "Come valuti il livello di dettaglio della formazione?",
+        options: [
+          { value: "need_more_detail", label: "Avrei avuto bisogno di qualche approfondimento in più" },
+          { value: "adequate", label: "Adeguato: abbastanza informazioni per capire come comportarmi" },
+          { value: "too_detailed", label: "Alcuni contenuti erano più dettagliati di quanto mi serva nel mio ruolo" }
+        ]
+      },
+      {
+        id: "q8_pace",
+        number: 8,
+        section: "1. Feedback sulla formazione",
+        type: "single",
+        required: true,
+        prompt: "Come hai trovato il ritmo dell’incontro?",
+        options: [
+          { value: "too_fast", label: "Troppo veloce" },
+          { value: "adequate", label: "Adeguato" },
+          { value: "too_slow", label: "Troppo lento" }
+        ]
+      },
+      {
+        id: "q9_improvements",
+        number: 9,
+        section: "1. Feedback sulla formazione",
+        type: "multiple",
+        required: true,
+        maxSelections: 2,
+        exclusiveValue: "format_adequate",
+        prompt: "Per rendere i prossimi incontri ancora più utili, cosa vorresti trovare maggiormente?",
+        helper: "Puoi selezionare al massimo 2 risposte. Se scegli che il format è già adeguato, non puoi selezionare altre opzioni.",
+        options: [
+          { value: "more_explanatory_examples", label: "Più esempi esplicativi durante la presentazione" },
+          { value: "more_questions", label: "Più spazio per domande e confronto" },
+          { value: "more_operational_summaries", label: "Più schemi e riepiloghi operativi" },
+          { value: "more_rules_procedures_detail", label: "Maggior approfondimento delle regole e delle procedure" },
+          { value: "more_escalation_clarity", label: "Più chiarezza su quando coinvolgere AMPE o HR" },
+          { value: "format_adequate", label: "Il format attuale mi sembra già adeguato" }
+        ]
+      },
+      {
+        id: "q10_most_useful",
+        number: 10,
+        section: "1. Feedback sulla formazione",
+        type: "text",
+        required: false,
+        prompt: "Qual è l’aspetto della formazione che ti è stato più utile?",
+        placeholder: "Scrivi qui la tua risposta…"
+      },
+      {
+        id: "q11_improve",
+        number: 11,
+        section: "1. Feedback sulla formazione",
+        type: "text",
+        required: false,
+        prompt: "C’è qualcosa che avresti voluto approfondire o che possiamo migliorare nei prossimi incontri?",
+        placeholder: "Scrivi qui la tua risposta…"
+      },
+      {
+        id: "q12_birth_support",
+        number: 12,
+        section: "2. Verifichiamo cosa ci portiamo a casa",
+        type: "quiz",
+        required: true,
+        prompt: "Accompagnamento alla nascita: quanti giorni sono previsti e come si utilizzano?",
+        options: [
+          { value: "A", label: "2 giorni consecutivi per ciascun figlio" },
+          { value: "B", label: "4 giorni consecutivi per ciascun figlio" },
+          { value: "C", label: "4 giorni per ciascun figlio, da utilizzare come singole giornate" },
+          { value: "D", label: "4 giorni complessivi, indipendentemente dal numero di figli" }
+        ],
+        correct: "C"
+      },
+      {
+        id: "q13_parental_leave_notice",
+        number: 13,
+        section: "2. Verifichiamo cosa ci portiamo a casa",
+        type: "quiz",
+        required: true,
+        prompt: "Con quale anticipo deve essere richiesta una tranche successiva del congedo parentale CIA?",
+        options: [
+          { value: "A", label: "Almeno 7 giorni prima della scadenza della tranche in corso" },
+          { value: "B", label: "Almeno 15 giorni prima della scadenza della tranche in corso" },
+          { value: "C", label: "Almeno 30 giorni prima della scadenza della tranche in corso" },
+          { value: "D", label: "Non è previsto un preavviso per le tranche successive" }
+        ],
+        correct: "C"
+      },
+      {
+        id: "q14_tfr_advance",
+        number: 14,
+        section: "2. Verifichiamo cosa ci portiamo a casa",
+        type: "quiz",
+        required: true,
+        prompt: "Durante il congedo parentale CIA, quale anticipo del TFR può essere richiesto?",
+        options: [
+          { value: "A", label: "Fino al 30% del TFR maturato" },
+          { value: "B", label: "Fino al 50% del TFR maturato" },
+          { value: "C", label: "Fino al 70% del TFR maturato e accantonato in azienda" },
+          { value: "D", label: "Fino al 100% del TFR maturato" }
+        ],
+        correct: "C"
+      },
+      {
+        id: "q15_training_leave",
+        number: 15,
+        section: "2. Verifichiamo cosa ci portiamo a casa",
+        type: "quiz",
+        required: true,
+        prompt: "Quali condizioni sono previste per il trattamento di favore relativo al congedo formativo?",
+        options: [
+          { value: "A", label: "Almeno 2 mesi consecutivi e 1 anno di anzianità" },
+          { value: "B", label: "Almeno 4 mesi consecutivi e 5 anni di anzianità" },
+          { value: "C", label: "Almeno 4 mesi consecutivi, 2 anni di anzianità e limite del 5% calcolato sul punto vendita" },
+          { value: "D", label: "Almeno 6 mesi consecutivi, senza requisiti di anzianità" }
+        ],
+        correct: "C"
+      },
+      {
+        id: "q16_violence_protection",
+        number: 16,
+        section: "2. Verifichiamo cosa ci portiamo a casa",
+        type: "quiz",
+        required: true,
+        prompt: "Qual è la tutela aggiuntiva retribuita prevista dal CIA per una lavoratrice inserita in un percorso contro la violenza?",
+        options: [
+          { value: "A", label: "Fino a 30 giorni retribuiti consecutivi" },
+          { value: "B", label: "Fino a 90 giorni retribuiti, esclusivamente continuativi" },
+          { value: "C", label: "Fino a 4 mesi retribuiti, anche non consecutivi, quando l’associazione che tutela la lavoratrice lo ritiene necessario" },
+          { value: "D", label: "Fino a 12 mesi retribuiti con conservazione del posto" }
+        ],
+        correct: "C"
+      }
+    ];
+
+    const activeQuestions = questions;
+
+    const screens = [
+      { type: "welcome", id: "welcome" },
+      { type: "identification", id: "identification" },
+      ...activeQuestions.flatMap((question, index) => {
+        const result = [];
+        const firstQuizIndex = activeQuestions.findIndex((item) => item.type === "quiz");
+        if (quizEnabled && index === firstQuizIndex) {
+          result.push({ type: "quiz-intro", id: "quiz-intro" });
+        }
+        result.push({ type: "question", id: question.id, question });
+        return result;
+      }),
+      { type: "finish", id: "finish" }
+    ];
+
+    const state = {
+      currentIndex: 0,
+      startedAt: null,
+      finishedAt: null,
+      responseId: createResponseId(),
+      identification: {
+        employeeCode: prefilledEmployeeCode,
+        storeCode: prefilledStoreCode
+      },
+      answers: {},
+      submitted: false,
+      submissionStatus: "not-started",
+      lastPayload: null
+    };
+
+    const app = document.getElementById("app");
+    const panel = document.getElementById("panel");
+    const progressWrap = document.getElementById("progressWrap");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressTrack = document.getElementById("progressTrack");
+    const modeBadge = document.getElementById("modeBadge");
+    const modeBadgeText = document.getElementById("modeBadgeText");
+    const fatalError = document.getElementById("fatalError");
+
+    function cleanText(value, maxLength) {
+      return String(value ?? "")
+        .replace(/[<>]/g, "")
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .trim()
+        .slice(0, maxLength);
+    }
+
+    function cleanCode(value, maxLength = 40) {
+      return cleanText(value, maxLength)
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function createResponseId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return "resp-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+    }
+
+    function getQuestionPosition(questionId) {
+      const index = activeQuestions.findIndex((question) => question.id === questionId);
+      return { current: index + 1, total: activeQuestions.length };
+    }
+
+    function getCurrentQuestionScreenIndex() {
+      const current = screens[state.currentIndex];
+      if (!current || current.type !== "question") return -1;
+      return activeQuestions.findIndex((question) => question.id === current.question.id);
+    }
+
+    function restoreDraft() {
+      if (!CONFIG.saveDraft) return;
+      try {
+        const raw = window.sessionStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+        if (!draft || draft.version !== QUESTIONNAIRE_VERSION) return;
+        if (draft.quizEnabled !== quizEnabled) return;
+        if (draft.answers && typeof draft.answers === "object") {
+          state.answers = draft.answers;
+        }
+        if (draft.identification && typeof draft.identification === "object") {
+          state.identification = {
+            employeeCode: cleanCode(draft.identification.employeeCode || prefilledEmployeeCode, 40),
+            storeCode: cleanCode(draft.identification.storeCode || prefilledStoreCode, 24)
+          };
+        }
+        if (draft.responseId) state.responseId = draft.responseId;
+        if (draft.startedAt) state.startedAt = draft.startedAt;
+        if (Number.isInteger(draft.currentIndex) && draft.currentIndex > 0 && draft.currentIndex < screens.length - 1) {
+          state.currentIndex = draft.currentIndex;
+        }
+      } catch (error) {
+        console.warn("Bozza non ripristinata:", error);
+      }
+    }
+
+    function saveDraft() {
+      if (!CONFIG.saveDraft || state.submitted) return;
+      try {
+        const draft = {
+          version: QUESTIONNAIRE_VERSION,
+          quizEnabled,
+          responseId: state.responseId,
+          startedAt: state.startedAt,
+          currentIndex: state.currentIndex,
+          identification: state.identification,
+          answers: state.answers
+        };
+        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      } catch (error) {
+        console.warn("Bozza non salvata:", error);
+      }
+    }
+
+    function clearDraft() {
+      try {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        console.warn("Bozza non eliminata:", error);
+      }
+    }
+
+    function render() {
+      try {
+        const screen = screens[state.currentIndex];
+        if (!screen) throw new Error("Schermata non disponibile");
+
+        panel.innerHTML = "";
+        panel.appendChild(buildScreen(screen));
+        panel.scrollLeft = 0;
+        panel.scrollTop = 0;
+        updateProgress(screen);
+        updateModeBadge();
+        saveDraft();
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.requestAnimationFrame(() => {
+          const heading = panel.querySelector("h1, h2, legend");
+          if (heading) {
+            heading.setAttribute("tabindex", "-1");
+            heading.focus({ preventScroll: true });
+          }
+          panel.scrollLeft = 0;
+          panel.scrollTop = 0;
+        });
+      } catch (error) {
+        console.error(error);
+        panel.style.display = "none";
+        fatalError.classList.add("is-visible");
+      }
+    }
+
+    function buildScreen(screen) {
+      if (screen.type === "welcome") return buildWelcomeScreen();
+      if (screen.type === "identification") return buildIdentificationScreen();
+      if (screen.type === "quiz-intro") return buildQuizIntroScreen();
+      if (screen.type === "question") return buildQuestionScreen(screen.question);
+      if (screen.type === "finish") return buildFinishScreen();
+      throw new Error("Tipo di schermata non riconosciuto");
+    }
+
+    function buildWelcomeScreen() {
+      const section = document.createElement("section");
+      const feedbackCount = activeQuestions.filter((question) => question.type !== "quiz").length;
+      const quizCount = activeQuestions.filter((question) => question.type === "quiz").length;
+      section.className = "screen is-active";
+      section.id = "screen-welcome";
+      section.innerHTML = `
+        <span class="eyebrow">Questionario post formazione</span>
+        <h1 class="welcome-title">Permessi CIA</h1>
+        <p class="welcome-subtitle">Feedback e verifica finale</p>
+        <p class="lead">
+          Grazie per aver partecipato all’incontro. Il questionario è diviso in due parti: una parte informativa per noi e una parte formativa per te.
+        </p>
+
+        <div class="parts-grid" aria-label="Le due parti del questionario">
+          <article class="part-card">
+            <span class="part-label">Parte 1 · Informativa per noi</span>
+            <h3>Feedback sulla formazione</h3>
+            <p>Ci aiuta a capire se l’incontro è stato chiaro e utile, dove emergono necessità di approfondimento e come migliorare i prossimi appuntamenti.</p>
+          </article>
+          <article class="part-card">
+            <span class="part-label">Parte 2 · Formativa per te</span>
+            <h3>Verifichiamo cosa ci portiamo a casa</h3>
+            <p>Un piccolo quiz finale di 5 domande per riprendere i contenuti e ricevere subito un riscontro sulle risposte.</p>
+          </article>
+        </div>
+
+        <div class="objective-grid" aria-label="Obiettivi della sessione">
+          <article class="objective-card">
+            <span class="objective-number">01</span>
+            <strong>Riconoscere le situazioni previste dal CIA.</strong>
+          </article>
+          <article class="objective-card">
+            <span class="objective-number">02</span>
+            <strong>Dare una prima indicazione corretta al collaboratore.</strong>
+          </article>
+          <article class="objective-card">
+            <span class="objective-number">03</span>
+            <strong>Capire quando coinvolgere Amministrazione del personale.</strong>
+          </article>
+        </div>
+
+        <div class="meta-note" aria-label="Informazioni sul questionario">
+          <span>${feedbackCount} domande di feedback</span>
+          <span>${quizCount} domande di verifica finale</span>
+          <span>Le domande aperte sono facoltative</span>
+          <span>Codice dipendente e codice negozio richiesti</span>
+        </div>
+
+        <div class="nav">
+          <span></span>
+          <button type="button" class="btn btn-primary" id="startButton">
+            Inizia
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      `;
+
+      section.querySelector("#startButton").addEventListener("click", () => {
+        if (!state.startedAt) state.startedAt = new Date().toISOString();
+        goNext();
+      });
+      return section;
+    }
+
+
+    function buildIdentificationScreen() {
+      const section = document.createElement("section");
+      section.className = "screen is-active";
+      section.id = "screen-identification";
+
+      section.innerHTML = `
+        <span class="eyebrow">Dati di compilazione</span>
+        <h2>Inserisci i codici richiesti</h2>
+        <p class="lead">
+          I codici permettono di collegare le risposte alla sessione e di individuare dove può essere utile un approfondimento. Non inserire nome o cognome.
+        </p>
+
+        <form id="identificationForm" novalidate>
+          <div class="identity-grid">
+            <div class="field-group">
+              <label class="field-label" for="employeeCode">Codice dipendente <span aria-hidden="true">*</span></label>
+              <input
+                class="field-input"
+                type="text"
+                id="employeeCode"
+                name="employeeCode"
+                maxlength="40"
+                autocomplete="off"
+                spellcheck="false"
+                required
+                value="${escapeHtml(state.identification.employeeCode)}"
+                aria-describedby="employeeHint employeeError"
+              />
+              <span class="field-hint" id="employeeHint">Inserisci soltanto il codice presente nei sistemi aziendali.</span>
+              <span class="field-error" id="employeeError" role="alert"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="storeCode">Codice negozio <span aria-hidden="true">*</span></label>
+              <input
+                class="field-input"
+                type="text"
+                id="storeCode"
+                name="storeCode"
+                maxlength="24"
+                autocomplete="off"
+                spellcheck="false"
+                required
+                value="${escapeHtml(state.identification.storeCode)}"
+                aria-describedby="storeHint storeError"
+              />
+              <span class="field-hint" id="storeHint">Usa il codice del negozio in cui lavori.</span>
+              <span class="field-error" id="storeError" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="data-note">
+            I codici saranno inviati insieme alle risposte e salvati nella lista SharePoint collegata al questionario.
+          </div>
+
+          <div class="nav">
+            <button type="button" class="btn btn-secondary" data-action="back">
+              <span class="btn-arrow" aria-hidden="true">←</span>
+              <span class="btn-label-optional">Indietro</span>
+            </button>
+            <button type="submit" class="btn btn-primary" data-action="next">
+              Continua
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      `;
+
+      const form = section.querySelector("#identificationForm");
+      const employeeInput = section.querySelector("#employeeCode");
+      const storeInput = section.querySelector("#storeCode");
+      const employeeError = section.querySelector("#employeeError");
+      const storeError = section.querySelector("#storeError");
+
+      const persistValues = () => {
+        state.identification.employeeCode = cleanCode(employeeInput.value, 40);
+        state.identification.storeCode = cleanCode(storeInput.value, 24);
+        saveDraft();
+      };
+
+      const validate = () => {
+        persistValues();
+        employeeError.textContent = "";
+        storeError.textContent = "";
+        employeeInput.removeAttribute("aria-invalid");
+        storeInput.removeAttribute("aria-invalid");
+
+        let valid = true;
+        if (!state.identification.employeeCode) {
+          employeeError.textContent = "Inserisci il codice dipendente per continuare.";
+          employeeInput.setAttribute("aria-invalid", "true");
+          valid = false;
+        }
+        if (!state.identification.storeCode) {
+          storeError.textContent = "Inserisci il codice negozio per continuare.";
+          storeInput.setAttribute("aria-invalid", "true");
+          valid = false;
+        }
+
+        if (!valid) {
+          const firstInvalid = section.querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+        }
+        return valid;
+      };
+
+      [employeeInput, storeInput].forEach((input) => {
+        input.addEventListener("input", () => {
+          persistValues();
+          input.removeAttribute("aria-invalid");
+          const error = input.id === "employeeCode" ? employeeError : storeError;
+          error.textContent = "";
+        });
+      });
+
+      section.querySelector('[data-action="back"]').addEventListener("click", () => {
+        persistValues();
+        goBack();
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (validate()) goNext();
+      });
+
+      return section;
+    }
+
+    function buildQuizIntroScreen() {
+      const section = document.createElement("section");
+      const quizCount = activeQuestions.filter((question) => question.type === "quiz").length;
+      section.className = "screen is-active section-intro";
+      section.id = "screen-quiz-intro";
+      section.innerHTML = `
+        <span class="eyebrow quiz">Parte 2 · Formativa per te</span>
+        <h2>2. Verifichiamo cosa ci portiamo a casa</h2>
+        <div class="section-intro-card">
+          <p class="lead">
+            Ora trovi un piccolo quiz finale di ${quizCount} domande, su contenuti diversi rispetto a quelli già affrontati durante la formazione.
+          </p>
+          <p>
+            Al termine vedrai il risultato e potrai rivedere le risposte corrette. L’obiettivo non è assegnare un voto, ma consolidare i contenuti principali.
+          </p>
+        </div>
+        <div class="nav">
+          <button type="button" class="btn btn-secondary" data-action="back">
+            <span class="btn-arrow" aria-hidden="true">←</span>
+            <span class="btn-label-optional">Indietro</span>
+          </button>
+          <button type="button" class="btn btn-primary" data-action="next">
+            Inizia il quiz
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      `;
+
+      section.querySelector('[data-action="back"]').addEventListener("click", goBack);
+      section.querySelector('[data-action="next"]').addEventListener("click", goNext);
+      return section;
+    }
+
+    function buildQuestionScreen(question) {
+      const section = document.createElement("section");
+      section.className = "screen is-active";
+      section.id = `screen-${question.id}`;
+
+      const position = getQuestionPosition(question.id);
+      const isQuiz = question.type === "quiz";
+      const optionalText = !question.required ? " · risposta facoltativa" : "";
+      const eyebrowClass = isQuiz ? "eyebrow quiz" : "eyebrow";
+
+      section.innerHTML = `
+        <span class="${eyebrowClass}">${escapeHtml(question.section)}</span>
+        <div class="question-number">Domanda ${position.current} di ${position.total}${optionalText}</div>
+        <form novalidate id="form-${question.id}">
+          <fieldset>
+            <legend><h2>${escapeHtml(question.prompt)}</h2></legend>
+            ${question.helper ? `<p class="helper">${escapeHtml(question.helper)}</p>` : ""}
+            <div class="answer-area" id="answer-${question.id}"></div>
+            <div class="error-message" id="error-${question.id}" role="alert">
+              <span class="error-icon" aria-hidden="true">!</span>
+              <span class="error-text">Seleziona una risposta per continuare.</span>
+            </div>
+          </fieldset>
+        </form>
+        <div class="nav">
+          <button type="button" class="btn btn-secondary" data-action="back" aria-label="Torna alla domanda precedente">
+            <span class="btn-arrow" aria-hidden="true">←</span>
+            <span class="btn-label-optional">Indietro</span>
+          </button>
+          <div class="nav-right">
+            ${!question.required ? `<button type="button" class="btn btn-secondary" data-action="skip">Salta</button>` : ""}
+            <button type="button" class="btn btn-primary" data-action="next">
+              ${position.current === position.total ? "Invia" : "Continua"}
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const answerArea = section.querySelector(`#answer-${CSS.escape(question.id)}`);
+      answerArea.appendChild(buildAnswerControl(question));
+      attachQuestionEvents(section, question);
+      return section;
+    }
+
+    function buildAnswerControl(question) {
+      if (question.type === "scale") return buildScale(question);
+      if (["single", "quiz"].includes(question.type)) return buildSingleChoice(question);
+      if (question.type === "multiple") return buildMultipleChoice(question);
+      if (question.type === "text") return buildTextArea(question);
+      throw new Error(`Tipo di domanda non supportato: ${question.type}`);
+    }
+
+    function buildScale(question) {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = `
+        <div class="scale-anchors" aria-hidden="true">
+          <span>1 · Per niente</span>
+          <span>5 · Moltissimo</span>
+        </div>
+        <div class="scale-grid"></div>
+      `;
+      const grid = wrapper.querySelector(".scale-grid");
+
+      scaleLabels.forEach((option) => {
+        const label = document.createElement("label");
+        label.className = "scale-option";
+        label.innerHTML = `
+          <input
+            class="option-input"
+            type="radio"
+            name="${escapeHtml(question.id)}"
+            value="${option.value}"
+            ${String(state.answers[question.id] ?? "") === option.value ? "checked" : ""}
+          />
+          <span class="scale-card">
+            <span class="scale-value">${option.value}</span>
+            <span class="scale-text">${escapeHtml(option.label)}</span>
+          </span>
+        `;
+        grid.appendChild(label);
+      });
+
+      return wrapper;
+    }
+
+    function buildSingleChoice(question) {
+      const list = document.createElement("div");
+      list.className = "choice-list";
+
+      question.options.forEach((option, index) => {
+        const marker = question.type === "quiz" ? option.value : String(index + 1).padStart(2, "0");
+        const label = document.createElement("label");
+        label.className = "choice-option";
+        label.innerHTML = `
+          <input
+            class="option-input"
+            type="radio"
+            name="${escapeHtml(question.id)}"
+            value="${escapeHtml(option.value)}"
+            ${state.answers[question.id] === option.value ? "checked" : ""}
+          />
+          <span class="choice-card">
+            <span class="choice-marker">${escapeHtml(marker)}</span>
+            <span class="choice-text">${escapeHtml(option.label)}</span>
+          </span>
+        `;
+        list.appendChild(label);
+      });
+      return list;
+    }
+
+    function buildMultipleChoice(question) {
+      const wrapper = document.createElement("div");
+      const selected = Array.isArray(state.answers[question.id]) ? state.answers[question.id] : [];
+      wrapper.innerHTML = `
+        <div class="selection-counter" id="counter-${question.id}" aria-live="polite">
+          ${selected.length} di ${question.maxSelections} selezionate
+        </div>
+        <div class="choice-list"></div>
+      `;
+      const list = wrapper.querySelector(".choice-list");
+
+      question.options.forEach((option, index) => {
+        const label = document.createElement("label");
+        label.className = "choice-option";
+        label.innerHTML = `
+          <input
+            class="option-input"
+            type="checkbox"
+            name="${escapeHtml(question.id)}"
+            value="${escapeHtml(option.value)}"
+            ${selected.includes(option.value) ? "checked" : ""}
+          />
+          <span class="choice-card">
+            <span class="choice-marker">${String(index + 1).padStart(2, "0")}</span>
+            <span class="choice-text">${escapeHtml(option.label)}</span>
+          </span>
+        `;
+        list.appendChild(label);
+      });
+
+      updateMultipleChoiceState(wrapper, question);
+      return wrapper;
+    }
+
+    function buildTextArea(question) {
+      const wrapper = document.createElement("div");
+      const current = cleanText(state.answers[question.id] || "", CONFIG.maxOpenTextLength);
+      wrapper.innerHTML = `
+        <textarea
+          id="textarea-${escapeHtml(question.id)}"
+          name="${escapeHtml(question.id)}"
+          maxlength="${CONFIG.maxOpenTextLength}"
+          placeholder="${escapeHtml(question.placeholder || "Scrivi qui…")}"
+        >${escapeHtml(current)}</textarea>
+        <div class="char-count" id="char-${question.id}" aria-live="polite">
+          ${current.length} / ${CONFIG.maxOpenTextLength}
+        </div>
+      `;
+      return wrapper;
+    }
+
+    function attachNavigation(section, validate) {
+      const back = section.querySelector('[data-action="back"]');
+      const next = section.querySelector('[data-action="next"]');
+      if (back) back.addEventListener("click", goBack);
+      if (next) {
+        next.addEventListener("click", () => {
+          if (!validate || validate()) goNext();
+        });
+      }
+    }
+
+    function attachQuestionEvents(section, question) {
+      const form = section.querySelector("form");
+      const nextButton = section.querySelector('[data-action="next"]');
+      const backButton = section.querySelector('[data-action="back"]');
+      const skipButton = section.querySelector('[data-action="skip"]');
+      const error = section.querySelector(`#error-${CSS.escape(question.id)}`);
+
+      const saveCurrentValue = () => {
+        if (question.type === "text") {
+          const textarea = form.querySelector("textarea");
+          state.answers[question.id] = cleanText(textarea.value, CONFIG.maxOpenTextLength);
+        } else if (question.type === "multiple") {
+          state.answers[question.id] = Array.from(form.querySelectorAll('input[type="checkbox"]:checked')).map((input) => input.value);
+        } else {
+          const checked = form.querySelector('input[type="radio"]:checked');
+          if (checked) state.answers[question.id] = checked.value;
+        }
+        hideError(error);
+        saveDraft();
+      };
+
+      form.addEventListener("change", (event) => {
+        if (question.type === "multiple" && event.target.matches('input[type="checkbox"]')) {
+          enforceExclusiveOption(form, question, event.target);
+        }
+        saveCurrentValue();
+        if (question.type === "multiple") {
+          const wrapper = form.querySelector(".answer-area > div");
+          updateMultipleChoiceState(wrapper, question);
+        }
+      });
+
+      if (question.type === "text") {
+        const textarea = form.querySelector("textarea");
+        const charCount = form.querySelector(`#char-${CSS.escape(question.id)}`);
+        textarea.addEventListener("input", () => {
+          state.answers[question.id] = cleanText(textarea.value, CONFIG.maxOpenTextLength);
+          charCount.textContent = `${textarea.value.length} / ${CONFIG.maxOpenTextLength}`;
+          hideError(error);
+          saveDraft();
+        });
+      }
+
+      backButton.addEventListener("click", () => {
+        saveCurrentValue();
+        goBack();
+      });
+
+      if (skipButton) {
+        skipButton.addEventListener("click", async () => {
+          saveCurrentValue();
+          const position = getQuestionPosition(question.id);
+          if (position.current === position.total) {
+            await handleSubmit(skipButton);
+          } else {
+            goNext();
+          }
+        });
+      }
+
+      nextButton.addEventListener("click", async () => {
+        saveCurrentValue();
+        if (!validateQuestion(question, error, form)) return;
+
+        const position = getQuestionPosition(question.id);
+        if (position.current === position.total) {
+          await handleSubmit(nextButton);
+        } else {
+          goNext();
+        }
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        nextButton.click();
+      });
+    }
+
+    function enforceExclusiveOption(form, question, changedInput) {
+      if (!question.exclusiveValue || !changedInput.checked) return;
+      const inputs = Array.from(form.querySelectorAll('input[type="checkbox"]'));
+      if (changedInput.value === question.exclusiveValue) {
+        inputs.forEach((input) => {
+          if (input !== changedInput) input.checked = false;
+        });
+      } else {
+        const exclusive = inputs.find((input) => input.value === question.exclusiveValue);
+        if (exclusive) exclusive.checked = false;
+      }
+    }
+
+    function updateMultipleChoiceState(wrapper, question) {
+      if (!wrapper) return;
+      const inputs = Array.from(wrapper.querySelectorAll('input[type="checkbox"]'));
+      const selectedCount = inputs.filter((input) => input.checked).length;
+      const counter = wrapper.querySelector(`#counter-${CSS.escape(question.id)}`);
+      if (counter) counter.textContent = `${selectedCount} di ${question.maxSelections} selezionate`;
+
+      inputs.forEach((input) => {
+        const label = input.closest("label");
+        const shouldDisable = selectedCount >= question.maxSelections && !input.checked;
+        input.disabled = shouldDisable;
+        label.classList.toggle("is-disabled", shouldDisable);
+      });
+    }
+
+    function validateQuestion(question, errorElement, form) {
+      if (!question.required) return true;
+
+      let valid = false;
+      if (question.type === "multiple") {
+        valid = form.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+      } else if (question.type === "text") {
+        valid = cleanText(form.querySelector("textarea").value, CONFIG.maxOpenTextLength).length > 0;
+      } else {
+        valid = Boolean(form.querySelector('input[type="radio"]:checked'));
+      }
+
+      if (!valid) {
+        showError(errorElement, question.type === "multiple"
+          ? "Seleziona almeno una risposta per continuare."
+          : "Seleziona una risposta per continuare."
+        );
+        const firstControl = form.querySelector("input, textarea");
+        if (firstControl) firstControl.focus();
+      }
+      return valid;
+    }
+
+    function showError(element, message) {
+      const text = element.querySelector(".error-text");
+      if (text) text.textContent = message;
+      element.classList.add("is-visible");
+    }
+
+    function hideError(element) {
+      if (element) element.classList.remove("is-visible");
+    }
+
+    function goNext() {
+      if (state.currentIndex < screens.length - 1) {
+        state.currentIndex += 1;
+        render();
+      }
+    }
+
+    function goBack() {
+      if (state.currentIndex > 0) {
+        state.currentIndex -= 1;
+        render();
+      }
+    }
+
+    function updateProgress(screen) {
+      const showProgress = !["welcome", "identification", "finish"].includes(screen.type);
+      progressWrap.classList.toggle("is-visible", showProgress);
+
+      if (!showProgress) {
+        progressBar.style.width = "0%";
+        progressTrack.setAttribute("aria-valuenow", "0");
+        return;
+      }
+
+      let completed = 0;
+      if (screen.type === "question") {
+        completed = getCurrentQuestionScreenIndex();
+      } else if (screen.type === "quiz-intro") {
+        completed = activeQuestions.findIndex((question) => question.type === "quiz");
+      }
+
+      const percent = activeQuestions.length ? Math.round((completed / activeQuestions.length) * 100) : 0;
+      progressBar.style.width = `${percent}%`;
+      progressTrack.setAttribute("aria-valuenow", String(percent));
+      progressLabel.textContent = `${Math.min(completed + 1, activeQuestions.length)} di ${activeQuestions.length}`;
+    }
+
+    function updateModeBadge() {
+      modeBadge.classList.toggle("is-visible", quizEnabled);
+      modeBadgeText.textContent = "2 parti · quiz incluso";
+    }
+
+    function getOptionLabel(questionId, value) {
+      const question = questions.find((item) => item.id === questionId);
+      if (!question || !Array.isArray(question.options)) return value || "";
+      const option = question.options.find((item) => item.value === value);
+      return option ? option.label : value || "";
+    }
+
+    function isQuizAnswerCorrect(questionId, answer) {
+      const question = questions.find((item) => item.id === questionId && item.type === "quiz");
+      return Boolean(question && answer && answer === question.correct);
+    }
+
+    function calculateQuiz() {
+      const quizQuestions = activeQuestions.filter((question) => question.type === "quiz");
+      const details = quizQuestions.map((question) => {
+        const answer = state.answers[question.id] || "";
+        return {
+          questionId: question.id,
+          questionNumber: question.number,
+          prompt: question.prompt,
+          answerCode: answer,
+          answerLabel: getOptionLabel(question.id, answer),
+          correctCode: question.correct,
+          correctLabel: getOptionLabel(question.id, question.correct),
+          isCorrect: answer === question.correct
+        };
+      });
+      const score = details.filter((item) => item.isCorrect).length;
+      const total = details.length;
+      return {
+        score,
+        total,
+        percentage: total ? Math.round((score / total) * 100) : null,
+        details
+      };
+    }
+
+    function buildPayload() {
+      state.finishedAt = new Date().toISOString();
+      const quiz = calculateQuiz();
+      const startedMs = state.startedAt ? Date.parse(state.startedAt) : NaN;
+      const finishedMs = Date.parse(state.finishedAt);
+      const durationSeconds = Number.isFinite(startedMs)
+        ? Math.max(0, Math.round((finishedMs - startedMs) / 1000))
+        : null;
+
+      const improvementCodes = Array.isArray(state.answers.q9_improvements)
+        ? state.answers.q9_improvements
+        : [];
+      const improvementLabels = improvementCodes.map((code) => getOptionLabel("q9_improvements", code));
+
+      const payload = {
+        responseId: state.responseId,
+        questionnaireVersion: QUESTIONNAIRE_VERSION,
+        questionnaireTitle: "Permessi CIA – Feedback e verifica finale",
+        sessionLabel,
+        employeeCode: cleanCode(state.identification.employeeCode, 40),
+        storeCode: cleanCode(state.identification.storeCode, 24),
+        quizIncluded: quizEnabled,
+        startedAt: state.startedAt,
+        submittedAt: state.finishedAt,
+        durationSeconds,
+
+        feedbackPreparednessScore: toNumberOrNull(state.answers.q1_preparedness),
+        roleClarityScore: toNumberOrNull(state.answers.q2_role_clarity),
+        informationToCollectClarityScore: toNumberOrNull(state.answers.q3_information_clarity),
+        escalationClarityScore: toNumberOrNull(state.answers.q4_escalation_clarity),
+        examplesHelpfulScore: toNumberOrNull(state.answers.q5_examples_helpful),
+        contentRelevanceScore: toNumberOrNull(state.answers.q6_content_relevance),
+
+        detailLevelCode: state.answers.q7_detail_level || "",
+        detailLevelLabel: getOptionLabel("q7_detail_level", state.answers.q7_detail_level),
+        paceCode: state.answers.q8_pace || "",
+        paceLabel: getOptionLabel("q8_pace", state.answers.q8_pace),
+
+        desiredImprovementsCodes: improvementCodes,
+        desiredImprovementsLabels: improvementLabels,
+        desiredImprovementsText: improvementLabels.join(" | "),
+        mostUseful: cleanText(state.answers.q10_most_useful || "", CONFIG.maxOpenTextLength),
+        improvementNotes: cleanText(state.answers.q11_improve || "", CONFIG.maxOpenTextLength),
+
+        quizScore: quizEnabled ? quiz.score : null,
+        quizTotal: quizEnabled ? quiz.total : null,
+        quizPercentage: quizEnabled ? quiz.percentage : null,
+
+        q12AnswerCode: quizEnabled ? state.answers.q12_birth_support || "" : "",
+        q12AnswerLabel: quizEnabled ? getOptionLabel("q12_birth_support", state.answers.q12_birth_support) : "",
+        q12Correct: quizEnabled ? isQuizAnswerCorrect("q12_birth_support", state.answers.q12_birth_support) : null,
+
+        q13AnswerCode: quizEnabled ? state.answers.q13_parental_leave_notice || "" : "",
+        q13AnswerLabel: quizEnabled ? getOptionLabel("q13_parental_leave_notice", state.answers.q13_parental_leave_notice) : "",
+        q13Correct: quizEnabled ? isQuizAnswerCorrect("q13_parental_leave_notice", state.answers.q13_parental_leave_notice) : null,
+
+        q14AnswerCode: quizEnabled ? state.answers.q14_tfr_advance || "" : "",
+        q14AnswerLabel: quizEnabled ? getOptionLabel("q14_tfr_advance", state.answers.q14_tfr_advance) : "",
+        q14Correct: quizEnabled ? isQuizAnswerCorrect("q14_tfr_advance", state.answers.q14_tfr_advance) : null,
+
+        q15AnswerCode: quizEnabled ? state.answers.q15_training_leave || "" : "",
+        q15AnswerLabel: quizEnabled ? getOptionLabel("q15_training_leave", state.answers.q15_training_leave) : "",
+        q15Correct: quizEnabled ? isQuizAnswerCorrect("q15_training_leave", state.answers.q15_training_leave) : null,
+
+        q16AnswerCode: quizEnabled ? state.answers.q16_violence_protection || "" : "",
+        q16AnswerLabel: quizEnabled ? getOptionLabel("q16_violence_protection", state.answers.q16_violence_protection) : "",
+        q16Correct: quizEnabled ? isQuizAnswerCorrect("q16_violence_protection", state.answers.q16_violence_protection) : null,
+
+
+        answers: {
+          identification: {
+            employeeCode: cleanCode(state.identification.employeeCode, 40),
+            storeCode: cleanCode(state.identification.storeCode, 24)
+          },
+          ...state.answers,
+          q9_improvementsLabels: improvementLabels
+        },
+        quizDetails: quizEnabled ? quiz.details : []
+      };
+      return payload;
+    }
+
+    function toNumberOrNull(value) {
+      const numeric = Number(value);
+      return Number.isFinite(numeric) ? numeric : null;
+    }
+
+    async function handleSubmit(button) {
+      if (state.submitted || button.disabled) return;
+
+      button.disabled = true;
+      button.classList.add("submitting");
+      button.setAttribute("aria-busy", "true");
+
+      const payload = buildPayload();
+      state.lastPayload = payload;
+      state.submissionStatus = "sending";
+
+      try {
+        if (!CONFIG.powerAutomateUrl) {
+          throw new Error("Endpoint Power Automate non configurato");
+        }
+
+        await sendToPowerAutomate(payload);
+        state.submissionStatus = "sent";
+
+        state.submitted = true;
+        clearDraft();
+        state.currentIndex = screens.length - 1;
+        render();
+      } catch (error) {
+        console.error("Invio non riuscito:", error);
+        storeUnsentPayload(payload);
+        state.submissionStatus = "failed";
+        showError(
+          document.querySelector(".error-message"),
+          "L’invio non è riuscito. Controlla la connessione e prova di nuovo. Una copia della risposta è stata conservata su questo dispositivo."
+        );
+        button.disabled = false;
+        button.classList.remove("submitting");
+        button.removeAttribute("aria-busy");
+        button.textContent = "Riprova invio →";
+      }
+    }
+
+    async function sendToPowerAutomate(payload) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 25000);
+
+      try {
+        /*
+          Invio compatibile con GitHub Pages senza azione "Response" nel flusso.
+          Power Automate deve contenere:
+          manual → Create item
+
+          Il payload viene inviato come text/plain e letto in Power Automate con:
+          json(string(triggerBody()))?['nomeCampo']
+        */
+        await fetch(CONFIG.powerAutomateUrl, {
+          method: "POST",
+          mode: "no-cors",
+          credentials: "omit",
+          cache: "no-store",
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          headers: {
+            "Content-Type": "text/plain;charset=UTF-8"
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          throw new Error("La richiesta non è partita entro il tempo previsto");
+        }
+        throw error;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    function storeUnsentPayload(payload) {
+      try {
+        const existing = JSON.parse(window.localStorage.getItem(FALLBACK_KEY) || "[]");
+        const safeExisting = Array.isArray(existing) ? existing.slice(-19) : [];
+        safeExisting.push(payload);
+        window.localStorage.setItem(FALLBACK_KEY, JSON.stringify(safeExisting));
+      } catch (error) {
+        console.warn("Copia locale non salvata:", error);
+      }
+    }
+
+    function buildFinishScreen() {
+      const section = document.createElement("section");
+      section.className = "screen is-active";
+      section.id = "screen-finish";
+
+      const quiz = calculateQuiz();
+
+      section.innerHTML = `
+        <span class="eyebrow">Questionario completato</span>
+        <div class="finish-layout">
+          <div>
+            <div class="success-mark" aria-hidden="true">✓</div>
+            <h2>Grazie per il tuo contributo.</h2>
+            <p class="lead">La compilazione è stata inviata. Il feedback ci aiuterà a migliorare i prossimi incontri; qui sotto puoi rivedere il risultato del mini quiz finale.</p>
+          </div>
+          <aside class="score-card" aria-label="Risultato del quiz">
+            <span class="score-value">${quiz.score}/${quiz.total}</span>
+            <span class="score-label">risposte corrette nel mini quiz finale</span>
+          </aside>
+        </div>
+        ${buildQuizReviewHtml(quiz)}
+      `;
+
+      return section;
+    }
+
+    function buildQuizReviewHtml(quiz) {
+      const items = quiz.details.map((item) => {
+        const statusClass = item.isCorrect ? "correct" : "wrong";
+        const symbol = item.isCorrect ? "✓" : "×";
+        const yourAnswer = item.answerLabel || "Nessuna risposta";
+        return `
+          <details class="result-item">
+            <summary>
+              <span class="result-status ${statusClass}" aria-hidden="true">${symbol}</span>
+              <span>Domanda ${item.questionNumber}: ${escapeHtml(item.isCorrect ? "risposta corretta" : "da rivedere")}</span>
+            </summary>
+            <div class="result-body">
+              <p><strong>La tua risposta:</strong> ${escapeHtml(yourAnswer)}</p>
+              ${item.isCorrect ? "" : `<p><strong>Risposta corretta:</strong> ${escapeHtml(item.correctLabel)}</p>`}
+            </div>
+          </details>
+        `;
+      }).join("");
+
+      return `
+        <div class="results-review" aria-label="Riepilogo delle risposte al quiz">
+          ${items}
+        </div>
+      `;
+    }
+
+
+    function init() {
+      app.hidden = false;
+      restoreDraft();
+      render();
+
+      if (debugMode) {
+        console.info("Configurazione questionario", {
+          version: QUESTIONNAIRE_VERSION,
+          quizEnabled,
+          sessionLabel,
+          employeeCodePrefilled: Boolean(prefilledEmployeeCode),
+          storeCodePrefilled: Boolean(prefilledStoreCode),
+          activeQuestions: activeQuestions.length,
+          powerAutomateConfigured: Boolean(CONFIG.powerAutomateUrl),
+          requestMode: CONFIG.requestMode
+        });
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
